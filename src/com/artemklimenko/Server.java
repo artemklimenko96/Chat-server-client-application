@@ -1,9 +1,6 @@
 package com.artemklimenko;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,23 +10,27 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) {
         try{
-            ServerSocket socket = new ServerSocket(1201);
+            ServerSocket socket = new ServerSocket(6666);
+            System.out.println("Waiting for a client...");
             Socket sock = socket.accept();
+            System.out.println("Got a client :");
+
+
             DataInputStream in = new DataInputStream(sock.getInputStream());
             DataOutputStream out = new DataOutputStream(sock.getOutputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-            String inMessage = "";
-            String outMessage = "";
-            while(outMessage != "stop"){
-                inMessage = in.readUTF();
-                System.out.println(inMessage);
-                outMessage = reader.readLine();
-                out.writeUTF(outMessage);
+
+
+            String outMessage = null;
+            int i = 0;
+            while(true){
+                outMessage = in.readUTF();
+                System.out.println(outMessage);
+                out.writeUTF(outMessage + " messageNo: " + i++);
                 out.flush();
 
             }
-            sock.close();
+
 
         }catch (Exception e){
             e.printStackTrace();
